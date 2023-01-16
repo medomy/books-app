@@ -23,6 +23,28 @@ const styles = StyleSheet.create(
         },
         authors: {
             fontWeight: "500"
+        },
+        activeAddToFavsBtn: {
+            padding: 6,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#198655",
+            width: "60%",
+            marginTop: 6,
+            borderRadius: 6
+        },
+        addToFavsTxt: {
+            color: "white",
+            fontWeight: "700"
+        },
+        removeFromFavsBtn: {
+            padding: 6,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#dd3544",
+            width: "60%",
+            marginTop: 6,
+            borderRadius: 6
         }
     }
 )

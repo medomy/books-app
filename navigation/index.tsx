@@ -17,7 +17,9 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+import { useSelector } from 'react-redux'
 import LinkingConfiguration from './LinkingConfiguration';
+import { RootState } from '../store/store';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -55,7 +57,8 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
-
+  // get the favourites to add to badge
+  const favs = useSelector((state: RootState) => state.favourites.favouriteBooks);
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
@@ -67,7 +70,7 @@ function BottomTabNavigator() {
         component={TabOneScreen}
         options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
           title: 'Home',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate('Modal')}
@@ -89,7 +92,8 @@ function BottomTabNavigator() {
         component={TabTwoScreen}
         options={{
           title: 'my books',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
+          tabBarBadge: favs.length
         }}
       />
     </BottomTab.Navigator>

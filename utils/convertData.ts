@@ -14,10 +14,10 @@ export function convertGoogle(data: any): Book[] {
 export function convertOpenLibrary(data: any): Book[] {
     return data.openLibrarySearch.docs.map((item: any) => {
         return {
-            id: item.cover_edition_key,
-            authors: item.author_name,
-            img: `https://covers.openlibrary.org/b/olid/${item.cover_edition_key}-M.jpg`,
-            name: item.title
+            id: item?.cover_edition_key ?? item.title,
+            authors: item?.author_name,
+            img: `https://covers.openlibrary.org/b/olid/${item?.cover_edition_key}-M.jpg`,
+            name: item?.title
         }
     })
 }

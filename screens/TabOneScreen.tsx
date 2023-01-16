@@ -11,6 +11,7 @@ import NoSearchYet from '../components/notSearchedYet/noSearchYet';
 import Book from '../types/book';
 import BookCard from '../components/bookCard/bookCard';
 import { convertGoogle, convertOpenLibrary } from '../utils/convertData';
+import useCachedAsyncStorage from '../hooks/useCachedAsyncStorage';
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -19,6 +20,8 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
   console.log(data);
   console.log(error);
   console.log(isLoading);
+  // using cached resources in async storage
+  useCachedAsyncStorage();
   const setSearchVal = (val: string) => {
     setSearchQuery(val);
   }
@@ -31,9 +34,9 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
       <SearchForm getSearchVal={setSearchVal} />
       <TabsContainer transferLibrary={setLibrary} />
       {searchQuery === "" ? <NoSearchYet /> :
-        data.errors && searchQuery !== "" ? <ActivityIndicator style={styles.loadingSpinner} /> :
+        isLoading || data.data.googleBooksSearch === null ? <View style={styles.loadingContainer}><ActivityIndicator style={styles.loadingSpinner} /></View> :
           <FlatList
-            data={chosenLibrary === "google" ? convertGoogle(data.data) : convertOpenLibrary(data.data)}
+            data={chosenLibrary === "google" ? convertGoogle(data!.data) : convertOpenLibrary(data!.data)}
             renderItem={flatlistRenderer}
             keyExtractor={(item) => item.id.toString()}
             showsVerticalScrollIndicator={false} />
@@ -58,5 +61,11 @@ const styles = StyleSheet.create({
   loadingSpinner: {
     marginTop: 6,
     width: 25
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 100
   }
 });

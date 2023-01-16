@@ -1,14 +1,21 @@
-import { StyleSheet } from 'react-native';
+import { ListRenderItem, StyleSheet, FlatList } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
-
+import { useSelector } from 'react-redux'
+import { RootState } from '../store/store';
+import Book from '../types/book';
+import BookCard from '../components/bookCard/bookCard';
 export default function TabTwoScreen() {
+  const favs = useSelector((state: RootState) => state.favourites.favouriteBooks);
+  const flatListRenderer: ListRenderItem<Book> = ({ item }) => (<BookCard book={item} />);
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
+      <FlatList
+        data={favs}
+        renderItem={flatListRenderer}
+        keyExtractor={(b) => b.id.toString()}
+      />
     </View>
   );
 }
@@ -16,8 +23,6 @@ export default function TabTwoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   title: {
     fontSize: 20,
